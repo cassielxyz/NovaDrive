@@ -38,21 +38,19 @@ Enjoy limitless storage, lightning-fast uploads/downloads, and an intuitive, mod
 
 ## 📦 Installation
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/cassielxyz/NovaDrive.git
-   cd NovaDrive
-   ```
+**The easiest way to install Nova Drive is to download the pre-compiled APK directly from this repository.**
 
-2. **Install Dependencies:**
-   ```bash
-   flutter pub get
-   ```
+1. Go to the [Releases folder](/releases) in this repository.
+2. Download the latest `NovaDrive-v1.0.0.apk` to your Android device.
+3. Open the downloaded APK file and tap **Install**. (You may need to allow installation from unknown sources in your Android settings).
 
-3. **Run the App:**
-   ```bash
-   flutter run
-   ```
+*Alternatively, if you want to build it from source:*
+```bash
+git clone https://github.com/cassielxyz/NovaDrive.git
+cd NovaDrive
+flutter pub get
+flutter build apk --release
+```
 
 ## 🔑 Authentication
 Nova Drive requires a Telegram API ID and Hash. Upon first launch, you will be prompted to enter your credentials securely. Your session is stored locally using `flutter_secure_storage` and the native `tdlib` database.
