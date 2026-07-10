@@ -1,0 +1,12 @@
+{
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "# Creator MCP Rules\n\nRules and conventions for writing scripts that use the Creator API. Read this before\nwriting scripts to avoid common pitfalls.\n\n## Layer Ordering\n\nLayers are rendered top-down: the **first layer** in the `scene.layers` array is rendered\n**on top** (foreground), and the **last layer** is rendered at the **bottom**\n(background).\n\nNew layers are appended to the end of the array, so the **last-created layer** ends up at\nthe **bottom**.\n\nTo get correct visual stacking:\n\n- Create **foreground layers first** (they'll be pushed down as you add more)\n- Create **background layers last** (they'll be at the bottom)\n- Think in **render order**, not creation chronology.\n\n### Required Workflow (Recommended)\n\nBefore creating any layers:\n\n1. Write the intended stack as `top -> bottom`.\n2. Create layers in that exact order.\n3. Verify the final order by checking `scene.layers`.\n\n```js\nconst scene = creator.activeScene;\n\n// Plan first: top -> bottom\nconst intendedOrder = ['FX', 'Logo', 'Background'];\n\n// Create in the same top -> bottom order\nscene.createShapeLayer({ name: 'FX' });\nscene.createShapeLayer({ name: 'Logo' });\nscene.createShapeLayer({ name: 'Background' });\n\nconst actualOrder = scene.layers.map((layer) => layer.name);\nconsole.log({ intendedOrder, actualOrder });\n```\n\nIf `actualOrder` differs from `intendedOrder`, your stacking is wrong and should be fixed\nbefore continuing.\n\n```js\n// Correct: background created last, appears behind\nconst scene = creator.activeScene;\nconst foreground = scene.createShapeLayer({ name: 'Icon' });\nconst background = scene.createShapeLayer({ name: 'Background' });\n// Result: layers = [\"Icon\", \"Background\"] — Icon renders on top\n```\n\nThe same rule applies to **shapes within a layer**: first shape in the array renders on\ntop.\n"
+      }
+    ]
+  },
+  "jsonrpc": "2.0",
+  "id": 1
+}
