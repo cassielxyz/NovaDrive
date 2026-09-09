@@ -1,16 +1,25 @@
 <p align="center"><img src="assets/readme/hero.svg" alt="NovaDrive banner" width="100%"></p>
 
-<p align="center"><strong>A Flutter file-management client that turns Telegram/TDLib-backed storage into a familiar drive experience.</strong></p>
+<p align="center"><strong>A drive-style file manager that uses Telegram/TDLib as the storage and sync layer, so users can browse, search and organize files without working through a chat-first interface.</strong></p>
 
 <p align="center"><code>Flutter</code> · <code>Dart</code> · <code>Riverpod</code> · <code>GoRouter</code> · <code>Drift</code> · <code>TDLib</code> · <code>flutter_secure_storage</code></p>
 
 <p align="center"><img src="assets/readme/divider.svg" width="100%" alt="divider"></p>
 
-## The idea
+## Why this is useful
 
-NovaDrive presents Telegram-backed file storage through a dedicated drive-style interface: browsing, search, categories, selection workflows, upload progress, local metadata, trash, smart vaults, and synchronization logic are organized behind a Flutter UI instead of a chat-centric interface.
+Telegram can hold a lot of personal files, but finding and managing those files through chats is not the same experience as using a dedicated drive application. NovaDrive explores a different interface on top of that storage layer.
 
-The project integrates TDLib through `handy_tdlib`, stores local metadata with Drift/SQLite, and uses `flutter_secure_storage` for sensitive local values. The repository includes Flutter targets for Android, iOS, web and desktop platforms; TDLib behavior and packaging should be validated per target before release.
+It is useful for:
+
+- people who already keep files in Telegram and want a more familiar file-manager experience;
+- browsing files by category instead of scrolling through chat history;
+- searching, filtering, selecting, downloading and organizing Telegram-backed files;
+- experimenting with a cross-platform personal drive interface without running a separate file-storage backend;
+- learning how Flutter can coordinate local metadata, secure client values and TDLib synchronization;
+- building a base for smart vaults, trash, storage statistics and richer file workflows.
+
+The project does not turn ordinary Telegram cloud chats into universal end-to-end-encrypted storage. It presents Telegram-backed content through a different client experience.
 
 <table>
 <tr>
@@ -50,6 +59,23 @@ Developer diagnostics
 Telegram synchronization
 ```
 
+## Typical user flow
+
+```text
+Sign in to Telegram
+       |
+       v
+Sync file metadata
+       |
+       v
+Browse files like a drive
+  |       |       |
+  v       v       v
+search  organize  download
+  |                 |
+  +------> trash / restore
+```
+
 ## Build from source
 
 Prerequisites: a Flutter toolchain compatible with the Dart SDK constraint in `pubspec.yaml`, plus platform-specific tooling for the target you build.
@@ -77,7 +103,7 @@ NovaDrive requires Telegram API credentials/session setup to communicate through
 
 - Telegram cloud chats and Saved Messages should not be described as universal end-to-end encrypted storage.
 - Treat file names, captions, links and remote metadata as untrusted input.
-- Keep TDLib databases and session state out of source control and backups intended for public sharing.
+- Keep TDLib databases and session state out of source control and public backups.
 - Validate downloaded files before opening them with external applications.
 - Keep external URL launching constrained to expected schemes and destinations.
 - Test logout/session-reset behavior so local metadata does not outlive intended account state.
@@ -119,15 +145,17 @@ lib/
 | File access | `file_picker`, `open_filex`, `path_provider` |
 | Reactive utilities | RxDart |
 
-## Discoverability keywords
+## Topics and tags
 
-Recommended GitHub topics:
+`flutter` · `dart` · `cloud-storage` · `telegram` · `tdlib` · `file-manager` · `riverpod` · `drift` · `sqlite` · `cross-platform` · `secure-storage` · `sync` · `personal-cloud`
 
-`flutter` · `dart` · `cloud-storage` · `telegram` · `tdlib` · `file-manager` · `riverpod` · `drift` · `sqlite` · `cross-platform` · `secure-storage` · `sync`
+## Suggested GitHub About description
+
+> Drive-style Flutter file manager for Telegram-backed storage, adding search, categories, smart vaults, trash and local metadata on top of a TDLib sync layer.
 
 ## License
 
 NovaDrive is distributed under the MIT License. See `LICENSE` for the full terms.
 
 <p align="center"><img src="assets/readme/mark.svg" width="58" alt="NovaDrive mark"></p>
-<p align="center"><sub>Drive-like ergonomics on top of a Telegram/TDLib synchronization layer.</sub></p>
+<p align="center"><sub>A familiar drive experience for files that already live in Telegram.</sub></p>
