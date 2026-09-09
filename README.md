@@ -1,69 +1,133 @@
-<div align="center">
-  <img src="assets/logo.png" width="150" height="150" alt="Nova Drive Logo" />
-  
-  # Nova Drive
-  
-  **The ultimate, secure, and blazing-fast cloud storage client built on top of Telegram's TDLib.**
-  
-  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-  [![Flutter](https://img.shields.io/badge/Flutter-3.x-blue.svg)](https://flutter.dev)
-  [![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20%7C%20Web-lightgrey.svg)]()
-</div>
+<p align="center"><img src="assets/readme/hero.svg" alt="NovaDrive banner" width="100%"></p>
 
----
+<p align="center"><strong>A Flutter file-management client that turns Telegram/TDLib-backed storage into a familiar drive experience.</strong></p>
 
-## 🚀 Overview
+<p align="center"><code>Flutter</code> · <code>Dart</code> · <code>Riverpod</code> · <code>GoRouter</code> · <code>Drift</code> · <code>TDLib</code> · <code>flutter_secure_storage</code></p>
 
-Nova Drive is a beautiful, highly optimized cloud storage application that leverages the power of Telegram's ecosystem. By using the official TDLib (Telegram Database Library) via FFI, Nova Drive transforms your "Saved Messages" and Telegram chats into a fully functional, end-to-end encrypted personal cloud drive. 
+<p align="center"><img src="assets/readme/divider.svg" width="100%" alt="divider"></p>
 
-Enjoy limitless storage, lightning-fast uploads/downloads, and an intuitive, modern user interface.
+## The idea
 
-## ✨ Features
+NovaDrive presents Telegram-backed file storage through a dedicated drive-style interface: browsing, search, categories, selection workflows, upload progress, local metadata, trash, smart vaults, and synchronization logic are organized behind a Flutter UI instead of a chat-centric interface.
 
-- **Blazing Fast Sync:** Uses native TDLib C++ bindings for maximum performance and minimum overhead.
-- **Infinite Storage:** Leverages Telegram's cloud infrastructure for unlimited file storage.
-- **Smart Vaults & Categories:** Automatically organizes your files into intuitive categories (Images, Videos, Documents, Music).
-- **Secure by Design:** Files are tied directly to your Telegram account. No third-party servers, no middle-men.
-- **Dynamic Theming:** Beautiful, responsive UI built with Flutter Riverpod and Material 3.
-- **Logical Deletions:** Safe and synchronized file deletions, complete with a Trash Bin.
+The project integrates TDLib through `handy_tdlib`, stores local metadata with Drift/SQLite, and uses `flutter_secure_storage` for sensitive local values. The repository includes Flutter targets for Android, iOS, web and desktop platforms; TDLib behavior and packaging should be validated per target before release.
 
-## 🛠 Tech Stack
+<table>
+<tr>
+<td width="25%" valign="top"><img src="assets/readme/icon-sync.svg" width="38"><br><strong>Telegram sync</strong><br>TDLib bridge, Telegram storage services and synchronization orchestration.</td>
+<td width="25%" valign="top"><img src="assets/readme/icon-search.svg" width="38"><br><strong>Drive navigation</strong><br>Browsing, pagination, filtering, search, selection and file actions.</td>
+<td width="25%" valign="top"><img src="assets/readme/icon-vault.svg" width="38"><br><strong>Organization</strong><br>Categories, smart vaults, local metadata and trash workflows.</td>
+<td width="25%" valign="top"><img src="assets/readme/icon-shield.svg" width="38"><br><strong>Client hardening</strong><br>Secure local storage, content sanitization and safer external URL handling.</td>
+</tr>
+</table>
 
-- **Framework:** [Flutter](https://flutter.dev) (Dart)
-- **State Management:** [Riverpod](https://riverpod.dev)
-- **Routing:** [GoRouter](https://pub.dev/packages/go_router)
-- **Core Engine:** [TDLib](https://core.telegram.org/tdlib) (via `handy_tdlib`)
-- **Local Database:** [Drift](https://drift.simonbinder.eu/) (SQLite)
-- **Secure Storage:** `flutter_secure_storage`
+## Architecture
 
-## 📦 Installation
+<p align="center"><img src="assets/readme/architecture.svg" alt="NovaDrive architecture" width="100%"></p>
 
-**The easiest way to install Nova Drive is to download the pre-compiled APK directly from this repository.**
+The implementation is split into clear layers:
 
-1. Go to the [Releases folder](/releases) in this repository.
-2. Download the latest `NovaDrive-v1.0.0.apk` to your Android device.
-3. Open the downloaded APK file and tap **Install**. (You may need to allow installation from unknown sources in your Android settings).
+- **Presentation:** feature screens and reusable `nova_*` widgets.
+- **State:** Riverpod providers for bootstrap, search, filtering, selection, upload progress, thumbnails, storage statistics and trash.
+- **Application services:** download, media cache, logging, secure storage, Telegram storage and synchronization services.
+- **Telegram bridge:** TDLib FFI and bridge code.
+- **Local persistence:** Drift/SQLite metadata plus platform secure storage for sensitive client-side values.
+- **Security utilities:** content sanitization and safe URL launching with dedicated tests.
 
-*Alternatively, if you want to build it from source:*
+## Current feature surface
+
+```text
+Authentication
+Drive browser
+Categories
+Search
+Smart vaults
+Upload progress
+Storage statistics
+Trash / restore flow
+Settings
+Developer diagnostics
+Telegram synchronization
+```
+
+## Build from source
+
+Prerequisites: a Flutter toolchain compatible with the Dart SDK constraint in `pubspec.yaml`, plus platform-specific tooling for the target you build.
+
 ```bash
 git clone https://github.com/cassielxyz/NovaDrive.git
 cd NovaDrive
 flutter pub get
+flutter analyze
+flutter test
+flutter run
+```
+
+For an Android release build:
+
+```bash
 flutter build apk --release
 ```
 
-## 🔑 Authentication
-Nova Drive requires a Telegram API ID and Hash. Upon first launch, you will be prompted to enter your credentials securely. Your session is stored locally using `flutter_secure_storage` and the native `tdlib` database.
+## Authentication and local secrets
 
-## 📄 License
+NovaDrive requires Telegram API credentials/session setup to communicate through TDLib. Keep API IDs, hashes, session material and other sensitive values out of Git history. The app includes `flutter_secure_storage` for sensitive local values, but platform storage guarantees differ; review each target before production distribution.
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Security notes
 
-## 🌟 Acknowledgements
-- [Telegram API & TDLib](https://core.telegram.org/tdlib)
-- The incredible Flutter community
+- Telegram cloud chats and Saved Messages should not be described as universal end-to-end encrypted storage.
+- Treat file names, captions, links and remote metadata as untrusted input.
+- Keep TDLib databases and session state out of source control and backups intended for public sharing.
+- Validate downloaded files before opening them with external applications.
+- Keep external URL launching constrained to expected schemes and destinations.
+- Test logout/session-reset behavior so local metadata does not outlive intended account state.
 
----
-<div align="center">
-  <i>Built with ❤️ by Cassiel</i>
-</div>
+## Project structure
+
+```text
+lib/
+├─ core/
+│  ├─ database/        Drift database and DAOs
+│  ├─ providers/       app-wide Riverpod state
+│  ├─ security/        sanitizer layer
+│  ├─ services/        storage, sync, download, cache, logging
+│  ├─ telegram_core/   TDLib bridge / FFI
+│  ├─ theme/           visual tokens and themes
+│  └─ utils/           safe URL and shared helpers
+├─ features/
+│  ├─ auth/
+│  ├─ categories/
+│  ├─ dashboard/
+│  ├─ developer/
+│  ├─ search/
+│  ├─ settings/
+│  ├─ smart_vaults/
+│  └─ trash/
+└─ shared/widgets/     NovaDrive component library
+```
+
+## Technology choices
+
+| Layer | Choice |
+| --- | --- |
+| UI | Flutter / Material |
+| State | Riverpod |
+| Routing | GoRouter |
+| Local database | Drift + SQLite |
+| Telegram client | TDLib via `handy_tdlib` |
+| Sensitive local values | `flutter_secure_storage` |
+| File access | `file_picker`, `open_filex`, `path_provider` |
+| Reactive utilities | RxDart |
+
+## Discoverability keywords
+
+Recommended GitHub topics:
+
+`flutter` · `dart` · `cloud-storage` · `telegram` · `tdlib` · `file-manager` · `riverpod` · `drift` · `sqlite` · `cross-platform` · `secure-storage` · `sync`
+
+## License
+
+NovaDrive is distributed under the MIT License. See `LICENSE` for the full terms.
+
+<p align="center"><img src="assets/readme/mark.svg" width="58" alt="NovaDrive mark"></p>
+<p align="center"><sub>Drive-like ergonomics on top of a Telegram/TDLib synchronization layer.</sub></p>
